@@ -1,0 +1,45 @@
+Name:            rdm-haskell
+Category:
+Synopsis:        data management for haskell with relation support
+version:        0.0.0.0
+build-type: Simple
+Cabal-Version: >=1.2
+
+-- right now this only enables implementation of the Serialize class found in HAppS.Data.Serialize
+Flag HAppS-State-support
+
+Library
+  hs-source-dirs:    src
+  exposed-modules: Database.InMem.Types
+                  , Database.InMem.TH
+  other-modules:  Database.InMem.Util
+  Build-Depends:   haskell98
+                  , base
+                  , template-haskell
+                  , mtl
+                  , containers
+                  , stm
+                  , directory
+                  , binary
+  if flag(HAppS-State-support)
+    Build-Depends:
+                  HAppS-Data
+    cpp-options: -DHAPPS_STATE_SUPPORT
+
+Executable      tests
+  Main-Is:        tests.hs
+  hs-source-dirs: src, test
+  Build-Depends: haskell98
+                , base
+                , template-haskell
+                , mtl
+                , stm
+                , containers
+                , HUnit
+                , directory
+                , HAppS-Data
+                , binary
+  if flag(HAppS-State-support)
+    Build-Depends:
+                  HAppS-State
+    cpp-options: -DHAPPS_STATE_SUPPORT
